@@ -31,32 +31,39 @@ h1 {
     /* Centers the grid */
 }
 
-/* 3. The Pokemon Cards */
+/* 3. The Retro 9-Slice Pokemon Card */
 .pokemon-card {
-    background: rgba(30, 41, 59, 0.7);
-    /* Slightly transparent dark card */
-    border: 1px solid rgba(74, 222, 128, 0.2);
-    border-radius: 16px;
-    padding: 24px;
+    /* The physical thickness of the border on screen. 
+       Change this to 32px if you want chunkier borders! */
+    border: 16px solid transparent;
+
+    border-image-source: url('card-bg.png');
+
+    /* We slice 16 pixels in from the edges. 'fill' draws the center tile too */
+    border-image-slice: 16 fill;
+    border-image-repeat: repeat;
+
+    /* Keep it crispy */
+    image-rendering: pixelated;
+
+    padding: 16px;
     text-align: center;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
-    /* Smooth animation for hovering */
+
+    /* A sharp, solid pixel-art drop shadow */
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+    transition: transform 0.1s ease;
 }
 
-/* 4. Hover Animation - makes the cards feel alive! */
+/* 4. Retro Hover Animation */
 .pokemon-card:hover {
-    transform: translateY(-8px);
-    /* Floats up slightly */
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(74, 222, 128, 0.3);
-    border-color: rgba(74, 222, 128, 0.6);
+    transform: translate(-4px, -4px);
+    box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.6);
 }
 
 /* 5. Sprite Styling */
 .pokemon-sprite {
     height: 120px;
     margin-bottom: 15px;
-    /* VERY IMPORTANT for Pokemon: keeps pixel art sharp instead of blurry when scaled up */
     image-rendering: pixelated;
     filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.4));
 }
@@ -76,5 +83,5 @@ h1 {
 }
 
 .pokemon-card strong {
-    color: #f8fafc;
+    color: #2b3911;
 }

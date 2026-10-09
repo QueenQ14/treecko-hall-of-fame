@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+body {
+    font-family: 'VT323', monospace;
+    background-color: #0f172a;
+    /* Deep sleek navy/black */
+    color: #e2e8f0;
+    margin: 0;
+    padding: 40px 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 40px;
+    /* A vibrant Treecko-green text gradient */
+    background: linear-gradient(to right, #4ade80, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* 2. Responsive Grid Container */
+#hof-container {
+    display: grid;
+    /* This automatically figures out how many 300px cards fit on the screen */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+    /* Centers the grid */
+}
+
+/* 3. The Pokemon Cards */
+.pokemon-card {
+    background: rgba(30, 41, 59, 0.7);
+    /* Slightly transparent dark card */
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    /* Smooth animation for hovering */
+}
+
+/* 4. Hover Animation - makes the cards feel alive! */
+.pokemon-card:hover {
+    transform: translateY(-8px);
+    /* Floats up slightly */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(74, 222, 128, 0.3);
+    border-color: rgba(74, 222, 128, 0.6);
+}
+
+/* 5. Sprite Styling */
+.pokemon-sprite {
+    height: 120px;
+    margin-bottom: 15px;
+    /* VERY IMPORTANT for Pokemon: keeps pixel art sharp instead of blurry when scaled up */
+    image-rendering: pixelated;
+    filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.4));
+}
+
+/* 6. Card Typography */
+.pokemon-card h2 {
+    margin: 0 0 15px 0;
+    font-size: 1.4rem;
+    color: #4ade80;
+    /* Treecko Green */
+}
+
+.pokemon-card p {
+    margin: 6px 0;
+    font-size: 0.95rem;
+    color: #cbd5e1;
+}
+
+.pokemon-card strong {
+    color: #f8fafc;
+}

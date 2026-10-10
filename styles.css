@@ -1,87 +1,190 @@
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap');
 
 body {
-    font-family: 'VT323', monospace;
-    background-color: #0f172a;
-    /* Deep sleek navy/black */
-    color: #e2e8f0;
+    font-family: 'Space Mono', monospace;
+    background-color: #0a2f2c;
+    color: #e8fff0;
     margin: 0;
     padding: 40px 20px;
 }
 
-h1 {
-    text-align: center;
-    font-size: 3rem;
-    font-weight: 800;
-    margin-bottom: 40px;
-    /* A vibrant Treecko-green text gradient */
-    background: linear-gradient(to right, #4ade80, #22c55e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* 2. Responsive Grid Container */
-#hof-container {
-    display: grid;
-    /* This automatically figures out how many 300px cards fit on the screen */
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
+/* The container for our new title area */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
     max-width: 1200px;
-    margin: 0 auto;
-    /* Centers the grid */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* 3. The Retro 9-Slice Pokemon Card */
-.pokemon-card {
-    /* The physical thickness of the border on screen. 
-       Change this to 32px if you want chunkier borders! */
-    border: 16px solid transparent;
+/* The green code-looking text */
+.subtitle {
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: #7fd9a0;
+    text-transform: uppercase;
+}
 
-    border-image-source: url('card-bg.png');
+h1 {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 3.5rem;
+    color: #ffffff;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
 
-    /* We slice 16 pixels in from the edges. 'fill' draws the center tile too */
-    border-image-slice: 16 fill;
-    border-image-repeat: repeat;
-
-    /* Keep it crispy */
+.page-logo {
+    height: 48px;
     image-rendering: pixelated;
-
-    padding: 16px;
-    text-align: center;
-
-    /* A sharp, solid pixel-art drop shadow */
-    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
-    transition: transform 0.1s ease;
 }
 
-/* 4. Retro Hover Animation */
+#hof-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 36px;
+    height: 550px;
+    margin-top: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* We also need a helper class for the cards so they transition smoothly when they swap places! */
+.card-transition {
+    transition: all 0.5s ease-in-out;
+}
+
+/* 3. The Foil Trading Card */
+.pokemon-card {
+    background: #ffd103;
+    border-radius: 18px;
+    padding: 12px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 60px rgba(127, 217, 160, 0.25);
+    position: relative;
+    transition: transform 0.3s ease;
+    width: 300px;
+    height: 430px;
+    margin: 0 auto;
+}
+
 .pokemon-card:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.6);
+    transform: translateY(-16px);
 }
 
-/* 5. Sprite Styling */
+/* The inner beige section of the card */
+.card-inner {
+    height: 100%;
+    border-radius: 10px;
+    background: #f6f2dc;
+    color: #17302a;
+    padding: 16px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 4. The Foil Animation Effect */
+@keyframes shine {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+.foil {
+    background: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(190, 255, 220, 0.55) 42%, rgba(255, 240, 170, 0.5) 50%, rgba(170, 220, 255, 0.5) 58%, rgba(255, 255, 255, 0) 70%);
+    background-size: 200% 100%;
+    animation: shine 5s linear infinite;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+}
+
+/* 5. Typography and Inner Layout for the Card */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 22px;
+    margin: 0;
+}
+
+.card-badge {
+    font-size: 11px;
+    background: #17302a;
+    color: #f3d98d;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.card-subtitle {
+    font-size: 12px;
+    font-style: italic;
+    color: #5b6f66;
+    margin-top: -6px;
+}
+
+.sprite-container {
+    height: 190px;
+    border-radius: 6px;
+    background: #c4e2bd;
+    border: 3px solid #ffd103;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .pokemon-sprite {
-    height: 120px;
-    margin-bottom: 15px;
+    height: 140px;
     image-rendering: pixelated;
     filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.4));
 }
 
-/* 6. Card Typography */
-.pokemon-card h2 {
-    margin: 0 0 15px 0;
-    font-size: 1.4rem;
-    color: #4ade80;
-    /* Treecko Green */
+.card-stats {
+    font-size: 12px;
+    line-height: 1.7;
 }
 
-.pokemon-card p {
-    margin: 6px 0;
-    font-size: 0.95rem;
-    color: #cbd5e1;
+.card-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #5b6f66;
 }
 
-.pokemon-card strong {
-    color: #2b3911;
+/* Styling for the Google Form Link */
+.submit-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    border: 2px solid #7fd9a0;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-family: 'Space Mono', monospace;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+/* Make it invert colors when you hover over it */
+.submit-link:hover {
+    background: #7fd9a0;
+    color: #0a2f2c;
 }

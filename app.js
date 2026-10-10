@@ -20,54 +20,117 @@ function getSpriteUrl(pokemon) {
 
 }
 
+let allPokemon = [];
+let currentIndex = 0;
+
 function loadTreeckoArmy() {
     Papa.parse(csvUrl, {
         download: true,
         header: true,
         complete: function (results) {
-            console.log("Data successfully loaded!");
-            console.log(results.data);
-            const container = document.getElementById("hof-container");
-            results.data.forEach(function (pokemon) {
-                // Skipping if no trainer name
-                if (!pokemon.OT) return;
-
-                //creating a new HTML div for current entry
-                const card = document.createElement("div");
-                card.className = "pokemon-card";
-
-                const sprite = document.createElement("img");
-                sprite.src = getSpriteUrl(pokemon);
-                sprite.alt = `${pokemon.Species}`;
-                sprite.className = "pokemon-sprite";
-                card.appendChild(sprite);
-
-                const title = document.createElement("h2");
-                // Using species as default if no nickname was given
-                const displayName = pokemon.Nickname ? pokemon.Nickname : pokemon.Species;
-                const displayTitle = pokemon.Title ? " " + pokemon.Title : "";
-                title.textContent = `${displayName}${displayTitle}`;
-                card.appendChild(title);
-
-                const trainerInfo = document.createElement("p");
-                const trainerLabel = document.createElement("strong");
-                trainerLabel.textContent = "Original Trainer: ";
-                trainerInfo.append(trainerLabel, `${pokemon.OT}`);
-                card.appendChild(trainerInfo);
-
-                const caughtInfo = document.createElement("p");
-                const caughtLabel = document.createElement("strong");
-                caughtLabel.textContent = "Caught: ";
-                caughtInfo.append(caughtLabel, pokemon.Caught);
-                card.appendChild(caughtInfo);
-
-                container.appendChild(card);
-            })
-        },
-        error: function (error) {
-            console.error("Error fetching the CSV:", error);
+            allPokemon = results.data.filter(pokemon => pokemon.OT);
+            renderCarousel();
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % allPokemon.length;
+                renderCarousel();
+            }, 4000);
         }
     });
 }
 
-loadTreeckoArmy()
+// A helper to build a single card
+function buildCardHTML(pokemon, position) {
+    if (!pokemon) return null; // Safety check
+
+    const card = document.createElement("div");
+    card.className = "pokemon-card card-transition";
+
+    if (position === "left") {
+        card.style.transform = "rotate(-6deg) translateY(30px) scale(0.9)";
+        card.style.zIndex = "1";
+    } else if (position === "right") {
+        card.style.transform = "rotate(6deg) translateY(30px) scale(0.9)";
+        card.style.zIndex = "1";
+    } else { // center
+        card.style.transform = "rotate(0deg) scale(1.05)";
+        card.style.zIndex = "2";
+    }
+
+    const inner = document.createElement("div");
+    inner.className = "card-inner";
+
+    const title = document.createElement("h2");
+    title.className = "card-title";
+    title.textContent = pokemon.Nickname ? pokemon.Nickname : pokemon.Species;
+    inner.appendChild(title);
+
+    if (pokemon.Title) {
+        const subtitle = document.createElement("div");
+        subtitle.className = "card-subtitle";
+        subtitle.textContent = pokemon.Title;
+        inner.appendChild(subtitle);
+    }
+
+    const spriteBox = document.createElement("div");
+    spriteBox.className = "sprite-container";
+    const sprite = document.createElement("img");
+    sprite.src = getSpriteUrl(pokemon);
+    sprite.alt = `${pokemon.Species}`;
+    sprite.className = "pokemon-sprite";
+    spriteBox.appendChild(sprite);
+    inner.appendChild(spriteBox);
+
+    const stats = document.createElement("div");
+    stats.className = "card-stats";
+    const trainerInfo = document.createElement("p");
+    const trainerLabel = document.createElement("strong");
+    trainerLabel.textContent = "Original Trainer: ";
+    trainerInfo.append(trainerLabel, `${pokemon.OT}`);
+    stats.appendChild(trainerInfo);
+
+    const caughtInfo = document.createElement("p");
+    const caughtLabel = document.createElement("strong");
+    caughtLabel.textContent = "Caught: ";
+    caughtInfo.append(caughtLabel, pokemon.Caught);
+    stats.appendChild(caughtInfo);
+    inner.appendChild(stats);
+
+    const footer = document.createElement("div");
+    footer.className = "card-footer";
+    if (pokemon.TID) {
+        footer.textContent = `${pokemon.TID}`;
+    }
+    inner.appendChild(footer);
+
+    const foil = document.createElement("div");
+    foil.className = "foil";
+    inner.appendChild(foil);
+
+    card.appendChild(inner);
+    return card;
+}
+
+function renderCarousel() {
+    const container = document.getElementById("hof-container");
+    container.innerHTML = ""; // Clear existing cards
+
+    if (allPokemon.length === 0) return;
+
+    // Figure out the indices for the Left, Center, and Right cards. 
+    // The % operator ensures it loops back to the start!
+    const leftIndex = (currentIndex - 1 + allPokemon.length) % allPokemon.length;
+    const centerIndex = currentIndex;
+    const rightIndex = (currentIndex + 1) % allPokemon.length;
+
+    // Only render 3 if we have at least 3 submissions!
+    if (allPokemon.length >= 3) {
+        container.appendChild(buildCardHTML(allPokemon[leftIndex], "left"));
+        container.appendChild(buildCardHTML(allPokemon[centerIndex], "center"));
+        container.appendChild(buildCardHTML(allPokemon[rightIndex], "right"));
+    } else {
+        // Fallback if there are only 1 or 2 entries
+        container.appendChild(buildCardHTML(allPokemon[centerIndex], "center"));
+    }
+}
+
+loadTreeckoArmy();
